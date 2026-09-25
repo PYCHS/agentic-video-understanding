@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "planned_not_preregistered",
+  "seed": 128,
+  "model": {
+    "id": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": null,
+    "processor_revision": null,
+    "backend": null,
+    "quantization": null,
+    "long_side_px": 448,
+    "processor_pixel_budget": null,
+    "greedy": true,
+    "max_new_tokens": null
+  },
+  "inputs": {
+    "audio": false,
+    "subtitles": false,
+    "format": "timestamped_image_text_pairs"
+  },
+  "agent": {
+    "initial_frames": 8,
+    "frame_cap": 24,
+    "max_rounds": 4,
+    "inspect_batches": [
+      4,
+      8
+    ],
+    "stop_confidence": 0.8
+  },
+  "methods": [
+    "uniform_8",
+    "uniform_16",
+    "uniform_24",
+    "clip_coarse_to_fine_24",
+    "adaptive_24",
+    "adaptive_always_24"
+  ],
+  "clip": {
+    "model_id": "openai/clip-vit-base-patch32",
+    "revision": null,
+    "coarse_frames": 8,
+    "fine_frames": 16,
+    "selection": "largest_adjacent_cosine_distance"
+  },
+  "dataset": {
+    "name": "Video-MME",
+    "target_questions": 100,
+    "medium_target": 50,
+    "long_target": 50,
+    "manifest_sha256": null
+  },
+  "statistics": {
+    "paired_bootstrap_ci": 0.95,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 128,
+    "mcnemar": "exact_two_sided",
+    "comparable_margin_pp": -2
+  }
+}

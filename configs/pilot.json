@@ -1,0 +1,15 @@
+{
+  "status": "planned",
+  "base_config": "main.json",
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "model_revision": null,
+  "processor_revision": null,
+  "target_questions": 20,
+  "manifest_sha256": null,
+  "methods": [
+    "uniform_24",
+    "adaptive_24"
+  ],
+  "pool_across_backbones": false,
+  "frame_set_matching": "pending_preregistration_clarification"
+}

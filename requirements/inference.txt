@@ -1,0 +1,10 @@
+# Candidate environment only: NOT tested or locked.
+# Select a CUDA-compatible torch build, validate both backbones, then freeze
+# exact versions and wheel/index provenance before scored experiments.
+torch
+transformers
+accelerate
+pillow
+av
+numpy
+scipy
