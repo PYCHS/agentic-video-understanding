@@ -11,7 +11,8 @@ stop after at most 24 frames. I want to test whether this works better than choo
 **Work in progress. No benchmark results yet.**
 So far, the code can choose timestamps, enforce the frame and round limits, and check when
 the agent is allowed to stop. There is also a small test run using made-up inputs.
-The video reader, model connection, CLIP encoder and evaluation scripts still need to be built.
+The video reader can now return selected frames, reject repeats, and resize them to a 448-pixel
+long side. The model connection, CLIP encoder and evaluation scripts still need to be built.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -77,6 +78,10 @@ The smoke command prints a **synthetic controller trace**, not a model answer or
 Inference dependencies are a separate, unvalidated [environment skeleton](requirements/inference.txt).
 Successful unit tests do not establish model or dataset compatibility.
 
+To try the video reader and run its tests, install `python -m pip install -e ".[video]"`.
+See [reading frames](docs/video_reader.md) for an example and current limits. The reader is
+not connected to the agent loop yet.
+
 ## Repository layout
 
 ```text
@@ -108,7 +113,8 @@ to report.
 ## Development
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
-each piece before moving on. The next step is the video reader and frame preprocessing.
+each piece before moving on. The next step is checking the model's JSON actions before the
+controller accepts them.
 
 ## Primary resources
 

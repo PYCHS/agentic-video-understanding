@@ -3,7 +3,8 @@
 Each item is a meaningful increment, not a daily quota. Work may take multiple days.
 
 - [x] Proposal-grounded docs, configs, CPU sampler/controller, tests and CI configuration.
-- [ ] Decoder and 448px preprocessing: verify frame IDs, boundaries, short clips and collisions.
+- [x] Reference decoder and 448px preprocessing: frame IDs, boundaries, short clips and collisions.
+  Reader-to-controller integration and broader source-format checks remain part of the adaptive loop.
 - [ ] Strict JSON parser and bounded error handling: reject invalid actions, count all calls.
 - [ ] Qwen3-VL adapter: real local smoke trace, frozen revisions and token/latency accounting.
 - [ ] Uniform/CLIP integrations: reproducible 8/16/24 and fixed 8+16 frame sets.
@@ -17,4 +18,4 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 
 Future automated work should select one ready item, validate it and commit only meaningful
 changes. If blocked on hardware, data or human screening, record the blocker instead of
-inventing progress. No daily scheduler is configured by this initial repository setup.
+inventing progress. Scheduling is managed outside this repository.

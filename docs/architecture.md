@@ -5,11 +5,13 @@
 `sampling.py` implements midpoint sampling and the fixed baseline's selection from supplied
 embeddings. `controller.py` enforces timestamps, batches, budget, rounds and stopping.
 `backend.py` defines a future adapter interface; `tracing.py` writes JSONL records.
-There is no live model adapter, decoder, strict model-output parser or benchmark runner yet.
+`video.py` reads selected frames from local videos and checks decoded-frame collisions.
+There is no live model adapter, strict model-output parser or benchmark runner yet.
+See [video reader](video_reader.md) for its timestamp convention and limits.
 
 ## Planned execution
 
-1. Decode only requested timestamps. Map them to stable decoded frame IDs; reject batches
+1. Return only requested frames. Map them to stable decoded frame IDs; reject batches
    that collide after decoding. Never silently duplicate frames or reduce batch size.
 2. Resize to a 448-pixel long side preserving aspect ratio. The long side is divisible by 32;
    padding/processor alignment of the short side must be frozen and logged before evaluation.
@@ -28,8 +30,8 @@ There is no live model adapter, decoder, strict model-output parser or benchmark
 ## Engineering interpretations requiring preregistration
 
 Midpoint timestamps and a 1-microsecond duplicate tolerance are initial choices, not explicit
-proposal requirements. The decoder must additionally compare actual frame IDs. Too-short
-clips need a predeclared exclusion/failure rule. Decoder collision checks and model JSON
+proposal requirements. The reader additionally compares actual frame IDs. Too-short clips
+need a predeclared exclusion/failure rule. Reader/controller integration and model JSON
 validation are future milestones, not already covered by the controller.
 
 Evidence sufficiency is structural: membership does not establish that an image truly supports

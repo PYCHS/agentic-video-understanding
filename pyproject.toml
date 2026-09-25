@@ -11,5 +11,8 @@ readme = "README.md"
 authors = [{name = "Peng Yi Cheng"}]
 dependencies = []
 
+[project.optional-dependencies]
+video = ["av>=16,<17", "Pillow>=11,<13"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
