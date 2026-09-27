@@ -5,7 +5,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Proposal-grounded docs, configs, CPU sampler/controller, tests and CI configuration.
 - [x] Reference decoder and 448px preprocessing: frame IDs, boundaries, short clips and collisions.
   Reader-to-controller integration and broader source-format checks remain part of the adaptive loop.
-- [ ] Strict JSON parser and bounded error handling: reject invalid actions, count all calls.
+- [x] Strict JSON parser: reject malformed fields, invalid intervals and unseen evidence.
+- [ ] Bounded runner error handling: log rejections, count all calls, enforce terminal failures.
 - [ ] Qwen3-VL adapter: real local smoke trace, frozen revisions and token/latency accounting.
 - [ ] Uniform/CLIP integrations: reproducible 8/16/24 and fixed 8+16 frame sets.
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.

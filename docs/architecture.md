@@ -6,7 +6,9 @@
 embeddings. `controller.py` enforces timestamps, batches, budget, rounds and stopping.
 `backend.py` defines a future adapter interface; `tracing.py` writes JSONL records.
 `video.py` reads selected frames from local videos and checks decoded-frame collisions.
-There is no live model adapter, strict model-output parser or benchmark runner yet.
+`actions.py` checks model JSON, action fields and observed evidence without mutating state.
+There is no live model adapter, retry/call-accounting runner or benchmark runner yet.
+See [action format](actions.md) for the parser contract and remaining integration work.
 See [video reader](video_reader.md) for its timestamp convention and limits.
 
 ## Planned execution
@@ -31,8 +33,8 @@ See [video reader](video_reader.md) for its timestamp convention and limits.
 
 Midpoint timestamps and a 1-microsecond duplicate tolerance are initial choices, not explicit
 proposal requirements. The reader additionally compares actual frame IDs. Too-short clips
-need a predeclared exclusion/failure rule. Reader/controller integration and model JSON
-validation are future milestones, not already covered by the controller.
+need a predeclared exclusion/failure rule. Reader/controller integration and model-call
+accounting are future milestones, not already covered by the parser or controller.
 
 Evidence sufficiency is structural: membership does not establish that an image truly supports
 an answer. Forced answers retain low confidence or unresolved evidence; empty evidence is
