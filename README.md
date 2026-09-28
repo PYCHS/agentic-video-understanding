@@ -15,6 +15,8 @@ The video reader can now return selected frames, reject repeats, and resize them
 long side. The model connection, CLIP encoder and evaluation scripts still need to be built.
 Model decisions now have a strict JSON parser that rejects malformed requests and references
 to unseen timestamps. See [the action format](docs/actions.md).
+The [model-call wrapper](docs/model_calls.md) now limits calls and records rejected decisions.
+It has only been tested with scripted responses so far.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -115,8 +117,8 @@ to report.
 ## Development
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
-each piece before moving on. Next is connecting these pieces into a loop with a clear limit
-on model calls and a record of failed decisions, before trying the real model.
+each piece before moving on. Next is connecting frame reading and decisions into one loop,
+then trying the real model.
 
 ## Primary resources
 

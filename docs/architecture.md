@@ -7,7 +7,9 @@ embeddings. `controller.py` enforces timestamps, batches, budget, rounds and sto
 `backend.py` defines a future adapter interface; `tracing.py` writes JSONL records.
 `video.py` reads selected frames from local videos and checks decoded-frame collisions.
 `actions.py` checks model JSON, action fields and observed evidence without mutating state.
-There is no live model adapter, retry/call-accounting runner or benchmark runner yet.
+`calls.py` limits backend attempts and records responses/rejections under a zero-retry policy.
+There is no live model adapter, integrated video runner or benchmark runner yet.
+See [model calls](model_calls.md) for the current limits and logging boundary.
 See [action format](actions.md) for the parser contract and remaining integration work.
 See [video reader](video_reader.md) for its timestamp convention and limits.
 
@@ -26,15 +28,15 @@ See [video reader](video_reader.md) for its timestamp convention and limits.
    round. At round 4 or 24 unique frames, the current decision must answer. No fifth round
    or hidden repair call is allowed; invalid terminal JSON is a logged failure.
 6. Reject invalid intervals, duplicates and over-budget requests without mutating state.
-   Error-feedback/retry behavior remains to be frozen with a bounded call budget; log every
-   attempted model call, including failures.
+   The call wrapper currently stops on errors with no retries and records every attempted
+   backend call, including failures. Freeze this choice before evaluation.
 
 ## Engineering interpretations requiring preregistration
 
 Midpoint timestamps and a 1-microsecond duplicate tolerance are initial choices, not explicit
 proposal requirements. The reader additionally compares actual frame IDs. Too-short clips
-need a predeclared exclusion/failure rule. Reader/controller integration and model-call
-accounting are future milestones, not already covered by the parser or controller.
+need a predeclared exclusion/failure rule. Reader/controller integration is a future milestone.
+Call accounting currently covers the backend interface, not a live model adapter.
 
 Evidence sufficiency is structural: membership does not establish that an image truly supports
 an answer. Forced answers retain low confidence or unresolved evidence; empty evidence is

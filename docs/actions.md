@@ -39,7 +39,6 @@ also check actual frame IDs before a future agent loop commits an observation. A
 the controller's evidence times are requested timestamps; the loop must reconcile them with
 decoded frame times before it uses the reader's actual-time evidence labels.
 
-There is no retry loop yet. A future runner must log the raw response and rejection reason,
-count every model call and use a bounded error policy. At a forced final round, malformed
-output must be a recorded failure, not a hidden extra model call. Call accounting and this
-runner-level behavior are still pending; parser tests do not claim to validate them.
+The [call wrapper](model_calls.md) records raw responses and rejection reasons and counts
+backend attempts. It stops on the first error without a retry, including at a forced final
+round. Its tests use scripted responses. The real model and full video runner are still pending.
