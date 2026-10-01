@@ -80,6 +80,27 @@ class VideoTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             reader.read([0])
 
+    def test_real_reader_session_uses_decoded_evidence(self):
+        from watch_wisely.actions import Decision
+        from watch_wisely.controller import Answer
+        from watch_wisely.session import ObservationSession
+        with av.open(str(self.path), "w") as out:
+            stream = out.add_stream("ffv1", rate=4)
+            stream.width, stream.height = 64, 32
+            stream.pix_fmt = "bgr0"
+            for _ in range(33):
+                frame = av.VideoFrame.from_image(Image.new("RGB", (64,32), "red"))
+                for packet in stream.encode(frame):
+                    out.mux(packet)
+            for packet in stream.encode():
+                out.mux(packet)
+        session = ObservationSession(VideoReader(self.path))
+        first = session.frames[0]
+        self.assertNotEqual(first.requested_s, first.timestamp_s)
+        result = session.apply(Decision(Answer("A", (first.timestamp_s,), "", .9), None))
+        self.assertEqual(result["unique_frames"], 8)
+        self.assertEqual(result["evidence"], [first.timestamp_s])
+
     def test_resize_portrait_square_and_rgb(self):
         for size, expected in [((30,60),(224,448)), ((12,12),(448,448)),
                                ((1000,333),(448,149))]:

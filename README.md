@@ -17,6 +17,8 @@ Model decisions now have a strict JSON parser that rejects malformed requests an
 to unseen timestamps. See [the action format](docs/actions.md).
 The [model-call wrapper](docs/model_calls.md) now limits calls and records rejected decisions.
 It has only been tested with scripted responses so far.
+The [observation session](docs/observation_session.md) connects the reader and controller.
+Failed batches leave the budget unchanged; answers cite actual decoded frame times.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).

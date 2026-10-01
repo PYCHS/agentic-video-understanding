@@ -4,7 +4,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 
 - [x] Proposal-grounded docs, configs, CPU sampler/controller, tests and CI configuration.
 - [x] Reference decoder and 448px preprocessing: frame IDs, boundaries, short clips and collisions.
-  Reader-to-controller integration and broader source-format checks remain part of the adaptive loop.
+  Broader source-format checks remain pending.
+- [x] Observation session: decode before committing budget; use actual times for evidence.
 - [x] Strict JSON parser: reject malformed fields, invalid intervals and unseen evidence.
 - [x] Model-call wrapper: record rejections, count attempts, enforce no retries and terminal failures.
   Full video-loop integration, timeouts and crash-safe trace persistence remain pending.

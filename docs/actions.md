@@ -35,9 +35,9 @@ still needs to be fixed when the backend is connected.
 
 Passing the parser does not authorize an action. The controller still checks remaining
 frames, rounds, repeated sample timestamps and the 0.80 early-stop rule. The reader must
-also check actual frame IDs before a future agent loop commits an observation. At present,
-the controller's evidence times are requested timestamps; the loop must reconcile them with
-decoded frame times before it uses the reader's actual-time evidence labels.
+also check actual frame IDs before committing an observation. ObservationSession now handles
+this step and supplies decoded times to its controller. Use its snapshot for call validation;
+the standalone controller still uses requested timestamps.
 
 The [call wrapper](model_calls.md) records raw responses and rejection reasons and counts
 backend attempts. It stops on the first error without a retry, including at a forced final

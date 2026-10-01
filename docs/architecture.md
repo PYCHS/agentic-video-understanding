@@ -9,6 +9,8 @@ embeddings. `controller.py` enforces timestamps, batches, budget, rounds and sto
 `actions.py` checks model JSON, action fields and observed evidence without mutating state.
 `calls.py` limits backend attempts and records responses/rejections under a zero-retry policy.
 There is no live model adapter, integrated video runner or benchmark runner yet.
+The [observation session](observation_session.md) connects the reader/controller with batch
+rollback and actual-time evidence. The complete model loop remains pending.
 See [model calls](model_calls.md) for the current limits and logging boundary.
 See [action format](actions.md) for the parser contract and remaining integration work.
 See [video reader](video_reader.md) for its timestamp convention and limits.
@@ -35,7 +37,7 @@ See [video reader](video_reader.md) for its timestamp convention and limits.
 
 Midpoint timestamps and a 1-microsecond duplicate tolerance are initial choices, not explicit
 proposal requirements. The reader additionally compares actual frame IDs. Too-short clips
-need a predeclared exclusion/failure rule. Reader/controller integration is a future milestone.
+need a predeclared exclusion/failure rule. The session now handles reader/controller integration.
 Call accounting currently covers the backend interface, not a live model adapter.
 
 Evidence sufficiency is structural: membership does not establish that an image truly supports
