@@ -10,7 +10,9 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Model-call wrapper: record rejections, count attempts, enforce no retries and terminal failures.
   Timeouts and crash-safe trace persistence remain pending.
 - [x] Question runner: survey, inspect/answer loop and failure handling with scripted-backend tests.
-  Real prompts/backend and durable run metadata remain pending.
+  Real backend and durable run metadata remain pending.
+- [x] Draft image/text prompt builder: actual timestamps, budget state and decision history.
+  Qwen processor compatibility and frozen baseline-matched prompts remain pending.
 - [ ] Qwen3-VL adapter: real local smoke trace, frozen revisions and token/latency accounting.
 - [ ] Uniform/CLIP integrations: reproducible 8/16/24 and fixed 8+16 frame sets.
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.

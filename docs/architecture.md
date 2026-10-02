@@ -10,6 +10,7 @@ embeddings. `controller.py` enforces timestamps, batches, budget, rounds and sto
 `calls.py` limits backend attempts and records responses/rejections under a zero-retry policy.
 `runner.py` connects observations and decisions with an injected message builder/backend.
 There is no live model adapter, frozen multimodal prompt or benchmark runner yet.
+`prompts.py` supplies a draft image/text builder; see [prompt notes](prompts.md).
 The [observation session](observation_session.md) connects the reader/controller with batch
 rollback and actual-time evidence. See [runner](runner.md) for the tested loop and its limits.
 See [model calls](model_calls.md) for the current limits and logging boundary.

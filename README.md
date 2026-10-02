@@ -20,7 +20,8 @@ It has only been tested with scripted responses so far.
 The [observation session](docs/observation_session.md) connects the reader and controller.
 Failed batches leave the budget unchanged; answers cite actual decoded frame times.
 The [question runner](docs/runner.md) now connects these steps and stops on failures. Its
-message builder and real Qwen backend are still pending; tests use scripted replies.
+draft [message builder](docs/prompts.md) pairs images with timestamps and budget rules.
+The real Qwen backend is still pending; tests use scripted replies.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -121,7 +122,8 @@ to report.
 ## Development
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
-each piece before moving on. Next is preparing the multimodal prompts and real model adapter.
+each piece before moving on. Next is connecting the real model and checking its processor
+against the draft image-and-text messages.
 
 ## Primary resources
 

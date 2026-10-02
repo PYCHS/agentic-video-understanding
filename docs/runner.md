@@ -7,7 +7,7 @@ question. There are no repair calls, including after a bad final response or a d
 
 The message builder receives the session and previous call records. It can use all selected
 images, actual timestamps, remaining budget and response history. A real multimodal prompt
-builder has not been implemented or frozen yet. The builder is trusted application code and
+builder is available in prompts.py, but has not been frozen or tested with Qwen. The builder is trusted application code and
 must not mutate the session. The backend still needs a real Qwen adapter.
 
 RunResult contains the answer or failure stage/reason, every attempted model call, each
