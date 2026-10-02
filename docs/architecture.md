@@ -8,9 +8,10 @@ embeddings. `controller.py` enforces timestamps, batches, budget, rounds and sto
 `video.py` reads selected frames from local videos and checks decoded-frame collisions.
 `actions.py` checks model JSON, action fields and observed evidence without mutating state.
 `calls.py` limits backend attempts and records responses/rejections under a zero-retry policy.
-There is no live model adapter, integrated video runner or benchmark runner yet.
+`runner.py` connects observations and decisions with an injected message builder/backend.
+There is no live model adapter, frozen multimodal prompt or benchmark runner yet.
 The [observation session](observation_session.md) connects the reader/controller with batch
-rollback and actual-time evidence. The complete model loop remains pending.
+rollback and actual-time evidence. See [runner](runner.md) for the tested loop and its limits.
 See [model calls](model_calls.md) for the current limits and logging boundary.
 See [action format](actions.md) for the parser contract and remaining integration work.
 See [video reader](video_reader.md) for its timestamp convention and limits.

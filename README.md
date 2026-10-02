@@ -19,6 +19,8 @@ The [model-call wrapper](docs/model_calls.md) now limits calls and records rejec
 It has only been tested with scripted responses so far.
 The [observation session](docs/observation_session.md) connects the reader and controller.
 Failed batches leave the budget unchanged; answers cite actual decoded frame times.
+The [question runner](docs/runner.md) now connects these steps and stops on failures. Its
+message builder and real Qwen backend are still pending; tests use scripted replies.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -74,8 +76,8 @@ Python 3.11 or 3.12 is recommended. No model weights, GPU, or dataset are needed
 python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
 # PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -e .
-python -m unittest discover -s tests -v
+python -m pip install -e ".[test]"
+python -m pytest tests -q
 python scripts/smoke.py
 python scripts/check_configs.py
 ```
@@ -85,8 +87,8 @@ Inference dependencies are a separate, unvalidated [environment skeleton](requir
 Successful unit tests do not establish model or dataset compatibility.
 
 To try the video reader and run its tests, install `python -m pip install -e ".[video]"`.
-See [reading frames](docs/video_reader.md) for an example and current limits. The reader is
-not connected to the agent loop yet.
+See [reading frames](docs/video_reader.md) for an example and current limits. Use the video
+and test extras together (`.[video,test]`) to run all checks, including reader tests.
 
 ## Repository layout
 
@@ -119,8 +121,7 @@ to report.
 ## Development
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
-each piece before moving on. Next is connecting frame reading and decisions into one loop,
-then trying the real model.
+each piece before moving on. Next is preparing the multimodal prompts and real model adapter.
 
 ## Primary resources
 

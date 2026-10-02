@@ -12,6 +12,7 @@ authors = [{name = "Peng Yi Cheng"}]
 dependencies = []
 
 [project.optional-dependencies]
+test = ["pytest>=8,<10"]
 video = ["av>=16,<17", "Pillow>=11,<13"]
 
 [tool.setuptools.packages.find]
