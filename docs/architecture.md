@@ -9,7 +9,8 @@ embeddings. `controller.py` enforces timestamps, batches, budget, rounds and sto
 `actions.py` checks model JSON, action fields and observed evidence without mutating state.
 `calls.py` limits backend attempts and records responses/rejections under a zero-retry policy.
 `runner.py` connects observations and decisions with an injected message builder/backend.
-There is no live model adapter, frozen multimodal prompt or benchmark runner yet.
+`qwen.py` implements a model adapter, validated only with interface doubles so far.
+Real inference, frozen multimodal prompts and a benchmark runner remain pending.
 `prompts.py` supplies a draft image/text builder; see [prompt notes](prompts.md).
 The [observation session](observation_session.md) connects the reader/controller with batch
 rollback and actual-time evidence. See [runner](runner.md) for the tested loop and its limits.

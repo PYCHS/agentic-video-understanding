@@ -21,7 +21,8 @@ The [observation session](docs/observation_session.md) connects the reader and c
 Failed batches leave the budget unchanged; answers cite actual decoded frame times.
 The [question runner](docs/runner.md) now connects these steps and stops on failures. Its
 draft [message builder](docs/prompts.md) pairs images with timestamps and budget rules.
-The real Qwen backend is still pending; tests use scripted replies.
+The [Qwen backend](docs/qwen_backend.md) is implemented but has only interface tests;
+real weights, processor compatibility and GPU inference remain unverified.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).

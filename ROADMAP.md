@@ -13,7 +13,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
   Real backend and durable run metadata remain pending.
 - [x] Draft image/text prompt builder: actual timestamps, budget state and decision history.
   Qwen processor compatibility and frozen baseline-matched prompts remain pending.
-- [ ] Qwen3-VL adapter: real local smoke trace, frozen revisions and token/latency accounting.
+- [x] Qwen3-VL adapter interface: explicit revisions/settings, greedy decoding and token accounting.
+- [ ] Real Qwen smoke test: compatible environment, pinned weights/processor and GPU validation.
 - [ ] Uniform/CLIP integrations: reproducible 8/16/24 and fixed 8+16 frame sets.
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
