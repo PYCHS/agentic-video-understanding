@@ -13,9 +13,51 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 from statistics import mean, median
 from typing import Any, Iterable
+
+
+def _nonnegative(value, label, *, integer=False):
+    if type(value) not in (int, float) or (integer and type(value) is not int):
+        raise ValueError(f"{label} must be a non-negative {'integer' if integer else 'number'}")
+    try:
+        valid = math.isfinite(value) and value >= 0
+    except OverflowError:
+        valid = False
+    if not valid:
+        raise ValueError(f"{label} must be finite and non-negative")
+
+
+def _validate_record(row):
+    required = {"call_index", "round_index", "forced_answer", "status", "error",
+                "response", "wall_latency_ms"}
+    if not isinstance(row, dict) or not required.issubset(row):
+        raise ValueError("call record must be an object with all required fields")
+    for field in ("call_index", "round_index"):
+        _nonnegative(row[field], field, integer=True)
+        if not 1 <= row[field] <= 4:
+            raise ValueError(f"{field} must be in [1, 4]")
+    if type(row["forced_answer"]) is not bool:
+        raise ValueError("forced_answer must be boolean")
+    if row["status"] not in ("accepted", "backend_error", "decision_rejected"):
+        raise ValueError("unknown call status")
+    if row["error"] is not None and not isinstance(row["error"], str):
+        raise ValueError("error must be text or null")
+    _nonnegative(row["wall_latency_ms"], "wall_latency_ms")
+    response = row["response"]
+    if response is None:
+        if row["status"] != "backend_error":
+            raise ValueError("only backend_error may have no response")
+        return
+    if not isinstance(response, dict) or not isinstance(response.get("raw_text"),str):
+        raise ValueError("response must include raw_text")
+    for field in ("input_tokens", "output_tokens", "visual_tokens", "latency_ms"):
+        if field not in response:
+            raise ValueError(f"response missing {field}; use null for unavailable measurements")
+        if response[field] is not None:
+            _nonnegative(response[field],field,integer=field != "latency_ms")
 
 
 def _percentile(values: list[float], q: float) -> float:
@@ -34,30 +76,17 @@ def _percentile(values: list[float], q: float) -> float:
 def load_call_records(paths: Iterable[Path]) -> list[dict[str, Any]]:
     """Load DecisionCaller JSONL traces and validate their minimal schema."""
     records: list[dict[str, Any]] = []
-    required = {
-        "call_index",
-        "round_index",
-        "forced_answer",
-        "status",
-        "error",
-        "response",
-        "wall_latency_ms",
-    }
 
     for path in paths:
         with path.open("r", encoding="utf-8") as stream:
             for line_number, line in enumerate(stream, start=1):
                 if not line.strip():
                     continue
-                row = json.loads(line)
-                missing = required.difference(row)
-                if missing:
-                    names = ", ".join(sorted(missing))
-                    raise ValueError(f"{path}:{line_number}: missing fields: {names}")
-                if row["wall_latency_ms"] < 0:
-                    raise ValueError(
-                        f"{path}:{line_number}: wall_latency_ms must be non-negative"
-                    )
+                try:
+                    row = json.loads(line)
+                    _validate_record(row)
+                except ValueError as exc:
+                    raise ValueError(f"{path}:{line_number}: {exc}") from exc
                 records.append(row)
 
     if not records:
@@ -81,6 +110,10 @@ def _optional_response_metric(
 
 def summarize_call_records(records: list[dict[str, Any]]) -> dict[str, Any]:
     """Return aggregate efficiency statistics for one collection of calls."""
+    if not records:
+        raise ValueError("no call records found")
+    for row in records:
+        _validate_record(row)
     wall_latencies = [float(row["wall_latency_ms"]) for row in records]
     accepted = sum(row["status"] == "accepted" for row in records)
     failed = len(records) - accepted
