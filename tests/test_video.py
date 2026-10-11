@@ -100,6 +100,15 @@ class VideoTests(unittest.TestCase):
         result = session.apply(Decision(Answer("A", (first.timestamp_s,), "", .9), None))
         self.assertEqual(result["unique_frames"], 8)
         self.assertEqual(result["evidence"], [first.timestamp_s])
+        from watch_wisely.baselines import observe_uniform
+        for count in (8, 16, 24):
+            observation = observe_uniform(VideoReader(self.path), count)
+            self.assertEqual(len(observation.frames), count)
+            self.assertEqual(len({f.frame_id for f in observation.frames}), count)
+            for frame in observation.frames:
+                self.assertEqual(frame.image.size, (448, 224))
+                self.assertEqual(frame.image.getpixel((0, 0)), (255, 0, 0))
+                self.assertLessEqual(frame.timestamp_s, frame.requested_s)
 
     def test_resize_portrait_square_and_rgb(self):
         for size, expected in [((30,60),(224,448)), ((12,12),(448,448)),

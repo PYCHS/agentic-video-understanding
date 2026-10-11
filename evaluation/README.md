@@ -20,6 +20,9 @@ Primary: Adaptive-24 minus Uniform-24 accuracy. Secondary: Uniform-8, Uniform-16
 CLIP 8+16 and adaptive always-use-24. Descriptive strata: duration, brief-event label,
 stop reason and failure mode. Report denominators and limitations of small subgroups.
 
+Uniform frame selection is implemented; see [usage and timing scope](../docs/uniform_baselines.md).
+Baseline model inference and scored comparisons remain pending.
+
 Report accuracy; mean/median frames; calls; input/output tokens; processed visual tokens
 summed across calls; mean/median/p95 model and end-to-end latency. Include CLIP/decoding
 overhead, warmups, hardware and peak memory. Audit missed events, wrong intervals,
