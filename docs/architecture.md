@@ -57,6 +57,8 @@ Encode 8 coarse frames using frozen CLIP ViT-B/32, normalize embeddings, compute
 cosine distances, choose the largest-distance interval, and add 16 interior uniform frames.
 Ties select the earliest interval. No question-conditioned CLIP ranking or adaptive replanning.
 The 16-frame batch belongs to this baseline, not the agent tool.
+The [decoder integration](coarse_to_fine.md) is implemented with an injected encoder;
+real frozen CLIP inference remains pending.
 
 ## Logging contract
 

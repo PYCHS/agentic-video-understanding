@@ -17,7 +17,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Call-cost summary validation: reject invalid measurements and preserve missing-value coverage.
 - [ ] Real Qwen smoke test: compatible environment, pinned weights/processor and GPU validation.
 - [x] Uniform-8/16/24 decoded frame sets, actual timestamps and selection timing.
-- [ ] Uniform model calls and CLIP integration: matched answer prompts and fixed 8+16 frame sets.
+- [x] Fixed 8+16 decoder integration with injected image embeddings and separate encoder timing.
+- [ ] Uniform model calls and frozen CLIP encoder: matched answer prompts and real inference.
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
 - [x] Prediction pairing: manifest-order ID alignment, missing/duplicate rejection, failures retained.
