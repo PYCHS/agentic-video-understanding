@@ -64,3 +64,32 @@ def test_summary_reports_adaptive_minus_baseline_accuracy():
     assert stats.discordant_a_only == 0
     assert stats.discordant_b_only == 1
     assert stats.ci_low <= stats.accuracy_delta <= stats.ci_high
+
+
+@pytest.mark.parametrize("bad", [0, 1, .5, "False", None, float("nan")])
+@pytest.mark.parametrize("function", [paired_bootstrap_ci, exact_mcnemar_p_value,
+                                     summarize_paired_results])
+def test_rejects_non_boolean_correctness(bad, function):
+    for baseline, adaptive in [([bad], [True]), ([False], [bad])]:
+        with pytest.raises(ValueError, match="must be bool"):
+            function(baseline, adaptive)
+
+
+@pytest.mark.parametrize("settings", [
+    {"samples": True}, {"samples": 1.5}, {"samples": 0},
+    {"seed": None}, {"seed": True}, {"seed": "128"},
+    {"confidence": True}, {"confidence": "0.95"},
+    {"confidence": float("nan")}, {"confidence": 1},
+])
+def test_rejects_invalid_bootstrap_settings(settings):
+    with pytest.raises(ValueError):
+        paired_bootstrap_ci([False], [True], **settings)
+
+
+def test_default_seed_matches_documented_protocol():
+    baseline = [True, False, False, True]
+    adaptive = [False, True, True, True]
+    assert paired_bootstrap_ci(baseline, adaptive) == paired_bootstrap_ci(
+        baseline, adaptive, seed=128)
+    assert summarize_paired_results(baseline, adaptive) == summarize_paired_results(
+        baseline, adaptive, seed=128)

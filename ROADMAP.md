@@ -22,6 +22,7 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
 - [x] Prediction pairing: manifest-order ID alignment, missing/duplicate rejection, failures retained.
+- [x] Paired-statistics input checks and default seed aligned with the draft protocol.
 - [ ] Paired statistics: trusted-reference validation and frozen-run provenance checks.
 - [ ] GPU environment lock and preregistration: fresh rerun, no unknown required run fields.
 - [ ] Main evaluation and failure analysis: raw traces support all reported outcomes and costs.

@@ -39,8 +39,9 @@ report a paired video-cluster bootstrap sensitivity CI and the number of indepen
 Exact two-sided McNemar: b = adaptive correct / baseline wrong; c = adaptive wrong / baseline
 correct. Under the null b ~ Binomial(b+c, 0.5). Use an exact two-sided binomial test; no
 discordant pairs means p=1. Report b, c, n, p, effect and CI. Label secondary comparisons
-exploratory or preregister multiplicity correction. Statistical implementation and validation
-against trusted-library results remain pending.
+exploratory or preregister multiplicity correction. The statistics helper requires boolean correctness values and defaults to seed 128.
+Invalid inputs are rejected before resampling. Trusted-library validation, video-cluster
+bootstrap and frozen-run provenance checks remain pending.
 
 Gain: CI lower bound >0. Comparable accuracy: lower bound >=-2 percentage points AND fewer
 mean frames. The study may be inconclusive; lack of significance does not prove equivalence.

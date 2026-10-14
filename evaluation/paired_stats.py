@@ -23,8 +23,10 @@ class PairedStats:
 
 
 def _validate(a: Sequence[bool], b: Sequence[bool]) -> None:
-    if not a or len(a) != len(b):
+    if len(a) == 0 or len(a) != len(b):
         raise ValueError("correctness vectors must be non-empty and equally sized")
+    if any(type(value) is not bool for vector in (a, b) for value in vector):
+        raise ValueError("correctness values must be bool, not scores or labels")
 
 
 def paired_bootstrap_ci(
@@ -33,13 +35,15 @@ def paired_bootstrap_ci(
     *,
     samples: int = 10_000,
     confidence: float = 0.95,
-    seed: int = 0,
+    seed: int = 128,
 ) -> tuple[float, float]:
     """Bootstrap a CI for adaptive accuracy minus baseline accuracy."""
     _validate(baseline, adaptive)
-    if samples <= 0:
-        raise ValueError("samples must be positive")
-    if not 0.0 < confidence < 1.0:
+    if type(samples) is not int or samples <= 0:
+        raise ValueError("samples must be a positive integer")
+    if type(seed) is not int:
+        raise ValueError("seed must be an integer")
+    if type(confidence) not in (int, float) or not 0.0 < confidence < 1.0:
         raise ValueError("confidence must lie in (0, 1)")
 
     diffs = [int(y) - int(x) for x, y in zip(baseline, adaptive)]
@@ -77,9 +81,9 @@ def summarize_paired_results(
     adaptive: Sequence[bool],
     *,
     bootstrap_samples: int = 10_000,
-    seed: int = 0,
+    seed: int = 128,
 ) -> PairedStats:
-    """Compute the preregistered paired accuracy statistics."""
+    """Compute draft paired accuracy statistics; the protocol is not yet frozen."""
     _validate(baseline, adaptive)
     delta = sum(int(y) - int(x) for x, y in zip(baseline, adaptive)) / len(baseline)
     ci_low, ci_high = paired_bootstrap_ci(
