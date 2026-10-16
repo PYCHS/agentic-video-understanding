@@ -39,12 +39,7 @@ def paired_bootstrap_ci(
 ) -> tuple[float, float]:
     """Bootstrap a CI for adaptive accuracy minus baseline accuracy."""
     _validate(baseline, adaptive)
-    if type(samples) is not int or samples <= 0:
-        raise ValueError("samples must be a positive integer")
-    if type(seed) is not int:
-        raise ValueError("seed must be an integer")
-    if type(confidence) not in (int, float) or not 0.0 < confidence < 1.0:
-        raise ValueError("confidence must lie in (0, 1)")
+    _validate_bootstrap(samples, confidence, seed)
 
     diffs = [int(y) - int(x) for x, y in zip(baseline, adaptive)]
     n = len(diffs)
@@ -54,10 +49,7 @@ def paired_bootstrap_ci(
         for _ in range(samples)
     )
 
-    alpha = (1.0 - confidence) / 2.0
-    lo = max(0, min(samples - 1, int(math.floor(alpha * samples))))
-    hi = max(0, min(samples - 1, int(math.ceil((1.0 - alpha) * samples)) - 1))
-    return draws[lo], draws[hi]
+    return _percentile_interval(draws, confidence)
 
 
 def exact_mcnemar_p_value(
@@ -91,3 +83,61 @@ def summarize_paired_results(
     )
     a_only, b_only, p_value = exact_mcnemar_p_value(baseline, adaptive)
     return PairedStats(delta, ci_low, ci_high, a_only, b_only, p_value)
+
+
+def _validate_bootstrap(samples, confidence, seed):
+    if type(samples) is not int or samples <= 0:
+        raise ValueError("samples must be a positive integer")
+    if type(seed) is not int:
+        raise ValueError("seed must be an integer")
+    if type(confidence) not in (int, float) or not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must lie in (0, 1)")
+
+
+
+def _percentile_interval(draws, confidence):
+    samples = len(draws)
+    alpha = (1.0 - confidence) / 2.0
+    lo = max(0, min(samples - 1, int(math.floor(alpha * samples))))
+    hi = max(0, min(samples - 1, int(math.ceil((1.0 - alpha) * samples)) - 1))
+    return draws[lo], draws[hi]
+
+
+@dataclass(frozen=True)
+class ClusterBootstrap:
+    accuracy_delta: float
+    ci_low: float
+    ci_high: float
+    video_count: int
+    question_count: int
+
+
+def paired_video_bootstrap_ci(baseline, adaptive, video_ids, *, samples=10_000,
+                              confidence=0.95, seed=128) -> ClusterBootstrap:
+    """Resample whole videos, retaining paired questions and question weighting.
+
+    Video IDs must follow the same frozen question order as both correctness
+    vectors. At least two distinct videos are required for this sensitivity CI.
+    """
+    _validate(baseline, adaptive)
+    _validate_bootstrap(samples, confidence, seed)
+    if len(video_ids) != len(baseline):
+        raise ValueError("video IDs must match the correctness vector length")
+    groups = {}
+    for x, y, video_id in zip(baseline, adaptive, video_ids):
+        if not isinstance(video_id, str) or not video_id.strip():
+            raise ValueError("video IDs must be non-empty strings")
+        groups.setdefault(video_id, []).append(int(y) - int(x))
+    if len(groups) < 2:
+        raise ValueError("cluster bootstrap needs at least two videos")
+    # Canonical order keeps seeded draws unchanged if input rows are reordered.
+    clusters = [(sum(groups[key]), len(groups[key])) for key in sorted(groups)]
+    rng = random.Random(seed)
+    draws = []
+    for _ in range(samples):
+        selected = [clusters[rng.randrange(len(clusters))] for _ in clusters]
+        draws.append(sum(total for total, count in selected) /
+                     sum(count for total, count in selected))
+    low, high = _percentile_interval(sorted(draws), confidence)
+    delta = sum(total for total, count in clusters) / len(baseline)
+    return ClusterBootstrap(delta, low, high, len(clusters), len(baseline))

@@ -40,8 +40,23 @@ Exact two-sided McNemar: b = adaptive correct / baseline wrong; c = adaptive wro
 correct. Under the null b ~ Binomial(b+c, 0.5). Use an exact two-sided binomial test; no
 discordant pairs means p=1. Report b, c, n, p, effect and CI. Label secondary comparisons
 exploratory or preregister multiplicity correction. The statistics helper requires boolean correctness values and defaults to seed 128.
-Invalid inputs are rejected before resampling. Trusted-library validation, video-cluster
-bootstrap and frozen-run provenance checks remain pending.
+Invalid inputs are rejected before resampling. Trusted-library validation and frozen-run
+provenance checks remain pending.
+
+`paired_video_bootstrap_ci` implements the additional video-cluster sensitivity check.
+Pass video IDs in the same frozen question order as the two correctness vectors. Each
+replicate draws as many videos as the original set, with replacement, and includes all
+paired questions from every selected video. Repeated videos repeat all their questions.
+The accuracy difference divides by the number of questions in that replicate, so videos
+with more questions keep their question-level weight. This is not an equal-video average.
+
+The helper returns the observed difference, CI and video/question counts. It requires at
+least two videos; a small number of videos still gives a fragile uncertainty estimate.
+Defaults are 10,000 draws, 95% confidence and seed 128. Video IDs are sorted before seeded
+sampling. Both bootstrap helpers use sorted-draw ranks floor(alpha * B) and
+ceil((1-alpha) * B)-1, clamped to valid zero-based indices, without interpolation.
+These choices need to be frozen before evaluation. Tests cover an exhaustive two-video
+case with unequal question counts; no real predictions have been analyzed.
 
 Gain: CI lower bound >0. Comparable accuracy: lower bound >=-2 percentage points AND fewer
 mean frames. The study may be inconclusive; lack of significance does not prove equivalence.

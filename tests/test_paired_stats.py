@@ -93,3 +93,38 @@ def test_default_seed_matches_documented_protocol():
         baseline, adaptive, seed=128)
     assert summarize_paired_results(baseline, adaptive) == summarize_paired_results(
         baseline, adaptive, seed=128)
+
+
+def test_video_bootstrap_preserves_clusters_and_question_weighting(monkeypatch):
+    from evaluation.paired_stats import paired_video_bootstrap_ci
+    # Exhaust all ordered draws of two videos: AA, AB, BA, BB.
+    # A has three wins; B has one loss. Mixed draws must be +0.5, not zero.
+    class Exhaustive:
+        def __init__(self, seed):
+            self.indices = iter([0, 0, 0, 1, 1, 0, 1, 1])
+        def randrange(self, n):
+            assert n == 2
+            return next(self.indices)
+    monkeypatch.setattr("evaluation.paired_stats.random.Random", Exhaustive)
+    result = paired_video_bootstrap_ci([False]*3+[True], [True]*3+[False],
+                                      ["A"]*3+["B"], samples=4, confidence=.5)
+    assert result.accuracy_delta == .5
+    assert (result.ci_low, result.ci_high) == (.5, .5)
+    assert (result.video_count, result.question_count) == (2, 4)
+
+
+def test_video_bootstrap_is_reproducible_after_row_reordering():
+    from evaluation.paired_stats import paired_video_bootstrap_ci
+    a, b, ids = [True, False, False], [False, True, True], ["z", "a", "z"]
+    result = paired_video_bootstrap_ci(a, b, ids, samples=100)
+    assert result == paired_video_bootstrap_ci(a[::-1], b[::-1], ids[::-1], samples=100)
+    swapped = paired_video_bootstrap_ci(b, a, ids, samples=100)
+    assert swapped.accuracy_delta == -result.accuracy_delta
+    assert (swapped.ci_low, swapped.ci_high) == (-result.ci_high, -result.ci_low)
+
+
+@pytest.mark.parametrize("ids", [["one", "one"], ["one"], ["one", ""], ["one", None]])
+def test_video_bootstrap_rejects_unusable_clusters(ids):
+    from evaluation.paired_stats import paired_video_bootstrap_ci
+    with pytest.raises(ValueError):
+        paired_video_bootstrap_ci([True, False], [False, True], ids)
