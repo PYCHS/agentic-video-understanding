@@ -40,8 +40,12 @@ Exact two-sided McNemar: b = adaptive correct / baseline wrong; c = adaptive wro
 correct. Under the null b ~ Binomial(b+c, 0.5). Use an exact two-sided binomial test; no
 discordant pairs means p=1. Report b, c, n, p, effect and CI. Label secondary comparisons
 exploratory or preregister multiplicity correction. The statistics helper requires boolean correctness values and defaults to seed 128.
-Invalid inputs are rejected before resampling. Trusted-library validation and frozen-run
-provenance checks remain pending.
+Invalid inputs are rejected before resampling. The exact McNemar calculation is checked against
+[SciPy's two-sided binomial test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binomtest.html)
+for every split of 1, 2, 3, 10, 20, 50 and 100 discordant pairs, including very small
+p-values and added concordant rows. CI installs the `stats-test` extra to run this
+comparison. Locally, install `.[test,stats-test]`; without SciPy this test module skips.
+Bootstrap reference validation and frozen-run provenance checks remain pending.
 
 `paired_video_bootstrap_ci` implements the additional video-cluster sensitivity check.
 Pass video IDs in the same frozen question order as the two correctness vectors. Each

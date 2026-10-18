@@ -24,7 +24,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Prediction pairing: manifest-order ID alignment, missing/duplicate rejection, failures retained.
 - [x] Paired-statistics input checks and default seed aligned with the draft protocol.
 - [x] Paired video-cluster bootstrap sensitivity CI with question weighting and cluster counts.
-- [ ] Paired statistics: trusted-reference validation and frozen-run provenance checks.
+- [x] Exact McNemar reference comparison against SciPy, included in CI.
+- [ ] Paired statistics: bootstrap reference validation and frozen-run provenance checks.
 - [ ] GPU environment lock and preregistration: fresh rerun, no unknown required run fields.
 - [ ] Main evaluation and failure analysis: raw traces support all reported outcomes and costs.
 - [ ] Qwen2.5-VL pilot: frozen 20 questions, matched protocol, no pooled effects.
