@@ -42,8 +42,15 @@ def test_partial_measurements_report_coverage_without_zero_fill():
     assert summary["failed_calls"] == 1
     assert summary["input_tokens_total"] == 20
     assert summary["visual_tokens_total"] is None
+    assert summary["model_latency_ms"] == {
+        "mean": 8,
+        "median": 8,
+        "p95": 8,
+        "total": 8,
+    }
     assert summary["measurement_coverage"]["input_tokens"] == 1
     assert summary["measurement_coverage"]["visual_tokens"] == 0
+    assert summary["measurement_coverage"]["model_latency_ms"] == 1
 
 
 def test_empty_unknown_status_and_missing_response_fail():
@@ -61,3 +68,20 @@ def test_valid_jsonl_roundtrip_and_percentile(tmp_path):
     path.write_text("\n".join(map(json.dumps,[first,second])),encoding="utf-8")
     summary = summarize_call_records(load_call_records([path]))
     assert summary["wall_latency_ms"] == {"mean":20,"median":20,"p95":29,"total":40}
+
+
+def test_model_latency_summary_uses_only_measured_calls():
+    first, second, third = record(), record(), record()
+    second["response"]["latency_ms"] = 18
+    third["response"]["latency_ms"] = None
+
+    summary = summarize_call_records([first, second, third])
+
+    assert summary["model_latency_ms"] == {
+        "mean": 13,
+        "median": 13,
+        "p95": 17.5,
+        "total": 26,
+    }
+    assert summary["model_latency_ms_total"] == 26
+    assert summary["measurement_coverage"]["model_latency_ms"] == 2
