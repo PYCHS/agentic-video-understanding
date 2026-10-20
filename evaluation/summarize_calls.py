@@ -94,9 +94,9 @@ def load_call_records(paths: Iterable[Path]) -> list[dict[str, Any]]:
     return records
 
 
-def _optional_response_metric(
+def _optional_response_values(
     records: list[dict[str, Any]], field: str
-) -> tuple[float | None, int]:
+) -> list[float]:
     values: list[float] = []
     for row in records:
         response = row.get("response")
@@ -105,7 +105,25 @@ def _optional_response_metric(
         value = response.get(field)
         if value is not None:
             values.append(float(value))
+    return values
+
+
+def _optional_response_metric(
+    records: list[dict[str, Any]], field: str
+) -> tuple[float | None, int]:
+    values = _optional_response_values(records, field)
     return (sum(values) if values else None, len(values))
+
+
+def _latency_summary(values: list[float]) -> dict[str, float] | None:
+    if not values:
+        return None
+    return {
+        "mean": mean(values),
+        "median": median(values),
+        "p95": _percentile(values, 0.95),
+        "total": sum(values),
+    }
 
 
 def summarize_call_records(records: list[dict[str, Any]]) -> dict[str, Any]:
@@ -121,9 +139,9 @@ def summarize_call_records(records: list[dict[str, Any]]) -> dict[str, Any]:
     input_tokens, input_coverage = _optional_response_metric(records, "input_tokens")
     output_tokens, output_coverage = _optional_response_metric(records, "output_tokens")
     visual_tokens, visual_coverage = _optional_response_metric(records, "visual_tokens")
-    model_latency_ms, model_latency_coverage = _optional_response_metric(
-        records, "latency_ms"
-    )
+    model_latency_values = _optional_response_values(records, "latency_ms")
+    model_latency_ms = sum(model_latency_values) if model_latency_values else None
+    model_latency_coverage = len(model_latency_values)
 
     return {
         "calls": len(records),
@@ -138,6 +156,7 @@ def summarize_call_records(records: list[dict[str, Any]]) -> dict[str, Any]:
         "input_tokens_total": input_tokens,
         "output_tokens_total": output_tokens,
         "visual_tokens_total": visual_tokens,
+        "model_latency_ms": _latency_summary(model_latency_values),
         "model_latency_ms_total": model_latency_ms,
         "measurement_coverage": {
             "input_tokens": input_coverage,
