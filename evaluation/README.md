@@ -45,7 +45,12 @@ Invalid inputs are rejected before resampling. The exact McNemar calculation is 
 for every split of 1, 2, 3, 10, 20, 50 and 100 discordant pairs, including very small
 p-values and added concordant rows. CI installs the `stats-test` extra to run this
 comparison. Locally, install `.[test,stats-test]`; without SciPy this test module skips.
-Bootstrap reference validation and frozen-run provenance checks remain pending.
+The paired question bootstrap also has an exhaustive three-question check: every
+ordered resample is evaluated independently with NumPy, keeping baseline and adaptive
+rows paired. Its 90% interval is compared with NumPy's inverse empirical CDF for a
+sample count without percentile rank ties. This covers mixed, one-sided and zero effects.
+It does not validate population coverage or the choice of bootstrap protocol. Broader
+cluster-bootstrap reference checks and frozen-run provenance checks remain pending.
 
 `paired_video_bootstrap_ci` implements the additional video-cluster sensitivity check.
 Pass video IDs in the same frozen question order as the two correctness vectors. Each
