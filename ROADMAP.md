@@ -19,6 +19,7 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Uniform-8/16/24 decoded frame sets, actual timestamps and selection timing.
 - [x] Fixed 8+16 decoder integration with injected image embeddings and separate encoder timing.
 - [ ] Uniform model calls and frozen CLIP encoder: matched answer prompts and real inference.
+- [x] Completed-question JSON export with explicit IDs, synthetic flag and no-overwrite publication.
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
 - [x] Prediction pairing: manifest-order ID alignment, missing/duplicate rejection, failures retained.

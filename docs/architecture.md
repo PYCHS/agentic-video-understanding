@@ -60,6 +60,9 @@ The 16-frame batch belongs to this baseline, not the agent tool.
 The [decoder integration](coarse_to_fine.md) is implemented with an injected encoder;
 real frozen CLIP inference remains pending.
 
+Completed runner outputs can be [saved as question records](results.md), including failures.
+Per-round recovery and frozen-run provenance checks remain pending.
+
 ## Logging contract
 
 Per call: run/question/video ID, method, backbone/revision, raw response/action, validation
