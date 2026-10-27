@@ -22,3 +22,16 @@ progress, validate claimed identities, or prove that a run used frozen weights,
 prompts and manifests. Those provenance checks and per-round recovery are still
 pending. The caller must choose a unique path for each run/method/question and
 handle disk errors; saving must never trigger another model attempt.
+
+## Preparing predictions for scoring
+
+Load the JSON files and pass the records to
+`evaluation.result_predictions.predictions_from_records`, with the expected
+`run_id` and `method`. It rejects synthetic records, mixed runs/methods, duplicate
+question IDs and inconsistent outcomes. Failures become null-option prediction
+rows, keeping their video IDs for later grouping. Pass those rows to
+`paired_correctness` with the frozen manifest to check completeness and score.
+
+The synthetic flag is a caller claim, not proof of a real experiment. This adapter
+does not validate model revisions, hashes, trace consistency or manifest video-ID
+matches. Keep the original records; prediction rows are only a scoring view.
