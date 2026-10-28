@@ -17,3 +17,11 @@ Gold labels belong only in this offline scoring step, never in prompts. The futu
 runner must also verify run provenance, backbone/config hashes and frozen-manifest identity.
 This helper checks IDs and scoring fields; it does not certify matched experimental settings.
 Tests use artificial examples. No dataset has been scored.
+
+
+For saved-run evaluation, set `require_video_ids=True` and include `video_id` in
+every manifest and prediction row. Matching is also automatic if any manifest row
+includes a video ID; partially filled manifests are rejected. Both answered and
+failed rows must match. Several questions may share one video. Legacy correctness
+checks without any manifest video IDs still work with the default flag, but do not
+verify video identity. ID matching does not verify the actual video file contents.

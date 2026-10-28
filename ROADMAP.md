@@ -23,7 +23,7 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
 - [x] Saved-result scoring adapter: reject synthetic/mixed records and retain failures.
-- [x] Prediction pairing: manifest-order ID alignment, missing/duplicate rejection, failures retained.
+- [x] Prediction pairing: manifest-order ID alignment, video-ID checks, missing/duplicate rejection, failures retained.
 - [x] Paired-statistics input checks and default seed aligned with the draft protocol.
 - [x] Paired video-cluster bootstrap sensitivity CI with question weighting and cluster counts.
 - [x] Exact McNemar reference comparison against SciPy, included in CI.

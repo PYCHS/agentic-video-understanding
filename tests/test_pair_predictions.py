@@ -41,3 +41,30 @@ def test_rejects_ambiguous_prediction_rows(patch):
 def test_rejects_invalid_manifest(manifest):
     with pytest.raises(ValueError):
         paired_correctness(manifest,BASE,ADAPT)
+
+
+def test_video_matching_preserves_shared_videos_and_manifest_order():
+    gold = [row | {"video_id":"same-video"} for row in GOLD]
+    base = [row | {"video_id":"same-video"} for row in BASE]
+    adaptive = [row | {"video_id":"same-video"} for row in ADAPT]
+    assert paired_correctness(gold, base, adaptive, require_video_ids=True) == (
+        ["q2", "q1"], [False, True], [True, False])
+
+
+@pytest.mark.parametrize("method", ["baseline", "adaptive"])
+@pytest.mark.parametrize("video_id", [None, "wrong-video", ""])
+def test_video_mismatch_is_rejected_even_for_failed_prediction(method, video_id):
+    gold = [row | {"video_id":"v1"} for row in GOLD]
+    base = [row | {"video_id":"v1"} for row in BASE]
+    adaptive = [row | {"video_id":"v1"} for row in ADAPT]
+    rows = base if method == "baseline" else adaptive
+    rows[1]["video_id"] = video_id
+    with pytest.raises(ValueError, match="video_id differs"):
+        paired_correctness(gold, base, adaptive)
+
+
+def test_strict_video_matching_cannot_silently_skip_missing_manifest_ids():
+    with pytest.raises(ValueError, match="every row"):
+        paired_correctness(GOLD, BASE, ADAPT, require_video_ids=True)
+    with pytest.raises(ValueError, match="every row"):
+        paired_correctness([GOLD[0] | {"video_id":"v1"}, GOLD[1]], BASE, ADAPT)

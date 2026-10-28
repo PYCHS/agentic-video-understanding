@@ -30,8 +30,8 @@ Load the JSON files and pass the records to
 `run_id` and `method`. It rejects synthetic records, mixed runs/methods, duplicate
 question IDs and inconsistent outcomes. Failures become null-option prediction
 rows, keeping their video IDs for later grouping. Pass those rows to
-`paired_correctness` with the frozen manifest to check completeness and score.
+`paired_correctness(..., require_video_ids=True)` with the frozen manifest to check
+completeness, match each video ID and score. Include `video_id` in every manifest row.
 
 The synthetic flag is a caller claim, not proof of a real experiment. This adapter
-does not validate model revisions, hashes, trace consistency or manifest video-ID
-matches. Keep the original records; prediction rows are only a scoring view.
+does not validate model revisions, hashes, trace consistency or file-content hashes. Keep the original records; prediction rows are only a scoring view.
