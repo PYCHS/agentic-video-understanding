@@ -33,6 +33,8 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [ ] Main evaluation and failure analysis: raw traces support all reported outcomes and costs.
 - [ ] Qwen2.5-VL pilot: frozen 20 questions, matched protocol, no pooled effects.
 - [ ] Research report: supported/unsupported hypotheses, limitations, contributor roles.
+  HW3 team progress now records implemented repository components and their offline
+  validation separately from the pending full-protocol evaluation.
 
 Future automated work should select one ready item, validate it and commit only meaningful
 changes. If blocked on hardware, data or human screening, record the blocker instead of
