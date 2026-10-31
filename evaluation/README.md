@@ -80,6 +80,23 @@ preregister whether it means matched sampling protocol or literal frame replay. 
 replay experiment must be labeled separately from a fresh adaptive-policy run.
 Compare effects within each backbone only; never pool predictions across models.
 
+## Comparing saved records
+
+`evaluation.compare_records.compare_records` connects saved-result checks, strict
+question/video matching and paired statistics. Pass the frozen manifest, two iterables
+of loaded question records, and the expected run IDs. Method defaults are Uniform-24
+and Adaptive-24. The function returns a JSON-compatible report without writing files.
+
+The report includes denominators, correct/failed counts, accuracy, paired intervals,
+McNemar results and the video-cluster sensitivity interval. Differences and intervals
+are proportions: multiply by 100 for percentage points. With only one video, the
+cluster interval is null with an explicit reason. Failed questions remain incorrect.
+
+Synthetic/mixed records and mismatched manifests fail before statistics. Model/config
+provenance is still unverified and marked as such in the report. This entry point does
+not compute efficiency metrics or declare a study conclusion. The report is not evidence
+that model revisions, prompts or video bytes were matched. No real comparison has run.
+
 ## Results
 
 All results are pending. No scored manifest, predictions, statistical output or GPU benchmark
