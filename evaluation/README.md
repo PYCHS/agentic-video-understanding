@@ -97,6 +97,27 @@ provenance is still unverified and marked as such in the report. This entry poin
 not compute efficiency metrics or declare a study conclusion. The report is not evidence
 that model revisions, prompts or video bytes were matched. No real comparison has run.
 
+### Command-line usage
+
+From the repository root, provide a manifest JSON array and two JSON arrays of
+complete saved question records (not the flattened prediction rows):
+
+```sh
+python -m evaluation.compare --manifest data/manifest.json --baseline runs/uniform.json --adaptive runs/adaptive.json --baseline-run-id uniform-run --adaptive-run-id adaptive-run
+```
+
+The command prints one JSON report to stdout. Defaults are 10,000 bootstrap draws
+and seed 128; `--bootstrap-samples` and `--seed` override them. Method names can be
+set with `--baseline-method` and `--adaptive-method`. Freeze choices before scoring.
+The command does not run inference or write result files. Input errors go to stderr
+with exit code 2 and no report. JSON arrays, unique object keys and standard numeric
+constants are required. This input format is not JSONL.
+
+The report hashes the exact bytes read from each input file with SHA-256, so those
+inputs can be identified later. Hashes do not prove that model or data provenance
+was correct; `provenance_verified` remains false. Shell output redirection can
+truncate an existing file, so choose a new destination if saving stdout.
+
 ## Results
 
 All results are pending. No scored manifest, predictions, statistical output or GPU benchmark

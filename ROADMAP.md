@@ -29,6 +29,7 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Exact McNemar reference comparison against SciPy, included in CI.
 - [x] Question bootstrap checked against exhaustive NumPy resamples for small cases.
 - [x] Saved-record comparison report: strict pairing, denominators, failures and paired/cluster intervals.
+- [x] Comparison CLI with strict JSON input, exact input hashes and explicit failure exit codes.
 - [ ] Paired statistics: broader cluster reference validation and frozen-run provenance checks.
 - [ ] GPU environment lock and preregistration: fresh rerun, no unknown required run fields.
 - [ ] Main evaluation and failure analysis: raw traces support all reported outcomes and costs.
