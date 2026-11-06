@@ -8,11 +8,13 @@ The idea here is simple: start with 8 frames, let the model decide where to look
 stop after at most 24 frames. I want to test whether this works better than choosing all
 24 frames in advance, and whether any improvement is worth the extra model calls.
 
-**Work in progress. No benchmark results yet.**
-So far, the code can choose timestamps, enforce the frame and round limits, and check when
-the agent is allowed to stop. There is also a small test run using made-up inputs.
-The video reader can now return selected frames, reject repeats, and resize them to a 448-pixel
-long side. The model connection, CLIP encoder and evaluation scripts still need to be built.
+**Work in progress. Core real-model integration is still pending.**
+The repository implements the sampler/controller, decoded observation sessions, strict
+action validation, a bounded question runner, a Qwen backend interface, fixed baseline
+selection, paired statistics and completed-question export. These paths have unit or
+synthetic-interface tests; that is not evidence of an end-to-end benchmark run.
+The video reader returns selected frames, rejects repeats, and resizes them to a 448-pixel
+long side. A real frozen CLIP encoder and matched baseline model calls remain pending.
 Model decisions now have a strict JSON parser that rejects malformed requests and references
 to unseen timestamps. See [the action format](docs/actions.md).
 The [model-call wrapper](docs/model_calls.md) now limits calls and records rejected decisions.
@@ -22,7 +24,11 @@ Failed batches leave the budget unchanged; answers cite actual decoded frame tim
 The [question runner](docs/runner.md) now connects these steps and stops on failures. Its
 draft [message builder](docs/prompts.md) pairs images with timestamps and budget rules.
 The [Qwen backend](docs/qwen_backend.md) is implemented but has only interface tests;
-real weights, processor compatibility and GPU inference remain unverified.
+real weights and processor compatibility through this core backend remain unverified.
+
+See the [HW3 team progress and commit review](docs/hw3_team_progress_zh-TW.md) for a
+verified implementation summary, local validation results, and remaining evaluation
+work. No model-accuracy measurements are reported in that progress summary.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -104,7 +110,10 @@ requirements/     optional inference environment skeleton
 tests/            budget, rejection, evidence and sampling invariants
 ```
 
-## Results (not run yet)
+## Core-protocol results (not run yet)
+
+This table concerns the original 8B/full-agent protocol. Unit tests, synthetic smoke
+traces and statistical reference checks do not fill the pending benchmark entries.
 
 | Method | Frame ceiling | Accuracy | Mean frames | Latency / tokens |
 |---|---:|---|---|---|
@@ -124,7 +133,8 @@ to report.
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
 each piece before moving on. Next is connecting the real model and checking its processor
-against the draft image-and-text messages.
+against the draft image-and-text messages. Canonical runner integration and a frozen
+dataset manifest remain prerequisites for a full-protocol comparison.
 
 ## Primary resources
 
