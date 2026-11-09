@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -21,11 +22,18 @@ def _constant(value):
     raise ValueError(f"invalid JSON numeric constant: {value}")
 
 
+def _finite_float(value):
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError(f"JSON number exceeds finite float range: {value}")
+    return parsed
+
+
 def _load(path):
     raw = path.read_bytes()
     try:
         rows = json.loads(raw.decode("utf-8"), object_pairs_hook=_object,
-                          parse_constant=_constant)
+                          parse_constant=_constant, parse_float=_finite_float)
         if not isinstance(rows, list):
             raise ValueError("expected a JSON array")
     except (ValueError, UnicodeError, RecursionError) as exc:

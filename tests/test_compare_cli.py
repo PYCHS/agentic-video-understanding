@@ -51,3 +51,20 @@ def test_invalid_cli_input_produces_no_report(tmp_path, bad):
     assert result.returncode == 2
     assert not result.stdout
     assert "comparison failed:" in result.stderr
+
+
+@pytest.mark.parametrize("number", ["1e999", "-1e999"])
+def test_loader_rejects_overflow_even_in_unused_nested_fields(tmp_path, number):
+    from evaluation.compare import _load
+    path = tmp_path / "overflow.json"
+    path.write_text('[{"metadata":{"latency":' + number + '}}]')
+    with pytest.raises(ValueError, match="finite float range"):
+        _load(path)
+
+
+def test_loader_preserves_finite_scientific_notation(tmp_path):
+    from evaluation.compare import _load
+    path = tmp_path / "finite.json"
+    path.write_text('[{"value":1e100,"small":1e-100}]')
+    rows, digest = _load(path)
+    assert rows == [{"value":1e100,"small":1e-100}]
