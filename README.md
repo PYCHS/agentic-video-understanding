@@ -12,7 +12,7 @@ stop after at most 24 frames. I want to test whether this works better than choo
 So far, the code can choose timestamps, enforce the frame and round limits, and check when
 the agent is allowed to stop. There is also a small test run using made-up inputs.
 The video reader can now return selected frames, reject repeats, and resize them to a 448-pixel
-long side. The model connection, CLIP encoder and evaluation scripts still need to be built.
+long side. The CLIP encoder and real-model evaluation still need to be completed.
 Model decisions now have a strict JSON parser that rejects malformed requests and references
 to unseen timestamps. See [the action format](docs/actions.md).
 The [model-call wrapper](docs/model_calls.md) now limits calls and records rejected decisions.
@@ -23,6 +23,15 @@ The [question runner](docs/runner.md) now connects these steps and stops on fail
 draft [message builder](docs/prompts.md) pairs images with timestamps and budget rules.
 The [Qwen backend](docs/qwen_backend.md) is implemented but has only interface tests;
 real weights, processor compatibility and GPU inference remain unverified.
+
+The [uniform frame selector](docs/uniform_baselines.md) and
+[coarse-to-fine decoder integration](docs/coarse_to_fine.md) are implemented; the latter
+has only been tested with supplied embeddings, not a live CLIP encoder.
+[Question records](docs/results.md) preserve answers and failures without overwriting
+existing files. The [evaluation tools](evaluation/README.md) can pair saved records,
+check question/video IDs, report failure counts, and compute bootstrap intervals and
+McNemar results through a command-line interface. These tools have synthetic tests;
+no real Video-MME comparison has run, and model/config provenance remains unverified.
 
 I'm **Peng Yi Cheng (PYCHS)**. This repo builds on our NCKU Group 128 course proposal by
 劉邦佑、蔡源慶、彭以呈、部政佑. See [provenance](docs/proposal.md).
@@ -90,7 +99,9 @@ Successful unit tests do not establish model or dataset compatibility.
 
 To try the video reader and run its tests, install `python -m pip install -e ".[video]"`.
 See [reading frames](docs/video_reader.md) for an example and current limits. Use the video
-and test extras together (`.[video,test]`) to run all checks, including reader tests.
+and test extras together (`.[video,test]`) for reader tests. To match CI, install
+`.[video,test,stats-test]`; this also enables the SciPy/NumPy reference comparisons.
+Without the statistics extra, those reference tests are skipped.
 
 ## Repository layout
 
@@ -98,7 +109,7 @@ and test extras together (`.[video,test]`) to run all checks, including reader t
 src/watch_wisely/  sampling, controller, backend interface, trace schema
 configs/          protocol settings and pilot specification (JSON)
 scripts/          offline checks and synthetic smoke run
-evaluation/       planned evaluation and statistical analysis
+evaluation/       saved-result validation, comparison CLI and statistics
 docs/             architecture, provenance, reproducibility, data screening
 requirements/     optional inference environment skeleton
 tests/            budget, rejection, evidence and sampling invariants
