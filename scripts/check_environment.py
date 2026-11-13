@@ -3,6 +3,7 @@ from importlib.metadata import PackageNotFoundError, version
 import json
 import platform
 import subprocess
+from subprocess import run
 
 
 def inventory():
@@ -13,7 +14,7 @@ def inventory():
         except PackageNotFoundError:
             packages[name] = None
     try:
-        result = subprocess.run(
+        result = run(
             ["nvidia-smi", "--query-gpu=name,driver_version,memory.total", "--format=csv,noheader"],
             capture_output=True, text=True, timeout=10, check=True)
         gpu = {"status":"reported", "csv":result.stdout.strip(), "error":None}
