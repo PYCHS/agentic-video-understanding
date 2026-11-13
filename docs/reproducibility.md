@@ -22,3 +22,15 @@ predictions and source commit by hashes. Publish derived results only after veri
 provenance and redistribution terms. Record failed runs and rerun reasons. Never substitute
 zero for unavailable measurements. Both backbones require real compatibility smoke tests;
 no GPU requirement, latency, compatibility or accuracy is asserted by this foundation.
+
+
+## Environment inventory
+
+Run `python scripts/check_environment.py` in the intended inference environment.
+It prints Python/platform information, installed package versions and the NVIDIA
+GPU/driver/memory inventory when `nvidia-smi` is available. Missing packages are
+null; GPU query errors are explicit. The query times out after ten seconds.
+This reads package metadata without importing the inference stack or downloading
+weights. It does not test CUDA kernels, model fit, processor compatibility or
+available memory, and always reports `inference_verified: false`. A real smoke
+run and an environment lock are still required.
