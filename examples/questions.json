@@ -1,0 +1,9 @@
+[
+  {
+    "question_id": "your-question-001",
+    "video_id": "your-video-001",
+    "video_path": "your_local_video.mp4",
+    "question": "What happens after the person enters the room?",
+    "options": {"A": "They sit down", "B": "They open a window", "C": "They leave", "D": "They pick up a book"}
+  }
+]

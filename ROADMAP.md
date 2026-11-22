@@ -10,7 +10,7 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [x] Model-call wrapper: record rejections, count attempts, enforce no retries and terminal failures.
   Timeouts and crash-safe trace persistence remain pending.
 - [x] Question runner: survey, inspect/answer loop and failure handling with scripted-backend tests.
-  Real backend and durable run metadata remain pending.
+  Batch wiring and durable run metadata are implemented; live GPU validation remains pending.
 - [x] Draft image/text prompt builder: actual timestamps, budget state and decision history.
   Qwen processor compatibility and frozen baseline-matched prompts remain pending.
 - [x] Qwen3-VL adapter interface: explicit revisions/settings, greedy decoding and token accounting.
@@ -18,9 +18,13 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 - [ ] Real Qwen smoke test: compatible environment, pinned weights/processor and GPU validation.
 - [x] Uniform-8/16/24 decoded frame sets, actual timestamps and selection timing.
 - [x] Fixed 8+16 decoder integration with injected image embeddings and separate encoder timing.
-- [ ] Uniform model calls and frozen CLIP encoder: matched answer prompts and real inference.
+- [x] Uniform model calls with strict evidence parsing and shared answer schema.
+- [ ] Frozen CLIP encoder and real inference validation.
 - [x] Completed-question JSON export with explicit IDs, synthetic flag and no-overwrite publication.
-- [ ] Adaptive loop and always-24 ablation: replayable traces, caps and terminal failures.
+- [x] Batch adaptive loop and always-24 wiring, saved responses, caps and terminal failures.
+  Real-model trace replay and empirical validation remain pending.
+- [x] Input manifest, CLI preflight, immutable revisions, input/source hashes and per-run metadata.
+- [x] Method-directory report connecting full-denominator paired accuracy and measured costs.
 - [ ] Dual-reviewer screening: labels, exclusions, kappa, target 100 questions and 20 pilot IDs.
 - [x] Saved-result scoring adapter: reject synthetic/mixed records and retain failures.
 - [x] Prediction pairing: manifest-order ID alignment, video-ID checks, missing/duplicate rejection, failures retained.
@@ -39,3 +43,4 @@ Each item is a meaningful increment, not a daily quota. Work may take multiple d
 Future automated work should select one ready item, validate it and commit only meaningful
 changes. If blocked on hardware, data or human screening, record the blocker instead of
 inventing progress. Scheduling is managed outside this repository.
+
