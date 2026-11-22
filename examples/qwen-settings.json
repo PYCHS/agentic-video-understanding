@@ -1,0 +1,8 @@
+{
+  "revision": "REPLACE_WITH_40_CHARACTER_MODEL_COMMIT_SHA",
+  "processor_revision": "REPLACE_WITH_40_CHARACTER_PROCESSOR_COMMIT_SHA",
+  "min_pixels": 3136,
+  "max_pixels": 200704,
+  "max_new_tokens": 512,
+  "device": "cuda:0"
+}

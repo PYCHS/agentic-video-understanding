@@ -79,6 +79,16 @@ flowchart LR
 Only selected frames reach the VLM, never the complete video. See [architecture](docs/architecture.md),
 [evaluation](evaluation/README.md), and [reproducibility](docs/reproducibility.md).
 
+## Batch inference and evaluation
+
+The [experiment runner](docs/experiment.md) now connects local question manifests,
+Qwen inference, Adaptive-24 / always-24 and Uniform-8/16/24, per-question records,
+run provenance and paired accuracy/cost reporting. It includes CPU integration tests;
+real Qwen GPU inference and Video-MME results remain pending.
+
+See `examples/questions.json` and `examples/qwen-settings.json` for input templates.
+The revision and video placeholders must be replaced before use.
+
 ## Quick start: CPU-only foundation
 
 Python 3.11 or 3.12 is recommended. No model weights, GPU, or dataset are needed.
@@ -134,7 +144,7 @@ to report.
 ## Development
 
 [ROADMAP.md](ROADMAP.md) lists the next steps. I plan to build this a piece at a time and check
-each piece before moving on. Next is connecting the real model and checking its processor
+each piece before moving on. Next is validating the connected pipeline on a real model and checking its processor
 against the draft image-and-text messages.
 
 ## Primary resources
@@ -147,3 +157,4 @@ against the draft image-and-text messages.
 
 Model and dataset licenses remain separate. No weights, videos, or credentials are included.
 A code redistribution license has not yet been selected by the team.
+
